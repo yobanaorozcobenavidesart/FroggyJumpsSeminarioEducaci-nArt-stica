@@ -342,7 +342,7 @@
             <div class="emotion-text" id="emotionText">Felicidad: 0%</div>
         </div>
         <div class="lives-area" id="livesContainer"></div>
-        <div class="timer-area">⏱️ <span id="timerSeconds">25</span>s</div>
+        <div class="timer-area">⏱️ <span id="timerSeconds">35</span>s</div>
     </div>
 
     <div class="level-indicator" id="levelIndicator">NIVEL 1 · Lirios 1 al 5</div>
@@ -458,7 +458,7 @@
     
     // Timer variables
     let activeTimer = null;
-    let timeLeft = 25;
+    let timeLeft = 35;
     
     // DOM elements
     const lilyContainer = document.getElementById("lilypadsContainer");
@@ -490,7 +490,7 @@
     function startTimer() {
         stopTimer();
         if (!gameActive || waitingAnswer === false) return;
-        timeLeft = 25;
+        timeLeft = 35;
         timerSpan.innerText = timeLeft;
         timerWarningSpan.innerText = "";
         activeTimer = setInterval(() => {
@@ -526,7 +526,7 @@
         stopTimer();
         
         lives--;
-        updateHappiness(-25);
+        updateHappiness(-35);
         updateLivesUI();
         
         feedbackDiv.classList.remove("hidden");
