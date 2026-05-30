@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Froggy Jumps · Salva a la Ranita · Evaluación Lúdica con TIC</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #1a6b3a, #0a3a1a);
+            font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            max-width: 1300px;
+            width: 100%;
+            background: linear-gradient(180deg, #4a9e5a, #2d6a2f);
+            border-radius: 60px 60px 40px 40px;
+            box-shadow: 0 25px 40px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+
+        /* NUEVO ENCABEZADO COMO LO SOLICITASTE */
+        .university-header {
+            background: linear-gradient(135deg, #1a472a, #0d2e1a);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-bottom: 3px solid #ffcc44;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,200,0.1);
+            padding: 5px 12px;
+            border-radius: 50px;
+        }
+        .logo-area img {
+            height: 45px;
+            width: auto;
+            border-radius: 8px;
+            background: white;
+            padding: 3px;
+        }
+        .uni-text {
+            color: #ffecb3;
+            font-size: 0.7rem;
+        }
+        .uni-text strong {
+            font-size: 0.8rem;
+            color: #ffcc44;
+        }
+        .header-title {
+            text-align: center;
+        }
+        .header-title h1 {
+            color: #ffcc44;
+            font-size: 1rem;
+            margin: 0;
+        }
+        .header-title p {
+            color: #fff9c4;
+            font-size: 0.7rem;
+            margin: 0;
+        }
+        .student-badge {
+            background: #2d6a2f;
+            padding: 5px 15px;
+            border-radius: 40px;
+            color: #ffe1a0;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .frog-emotion-area {
+            background: linear-gradient(180deg, #5aaa6a, #3a7a3f);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            border-bottom: 2px solid #ffcc44;
+        }
+        .frog-character {
+            text-align: center;
+            flex: 1;
+        }
+        .frog-image {
+            font-size: 80px;
+            transition: transform 0.3s, filter 0.3s;
+            display: inline-block;
+        }
+        .frog-jump {
+            animation: frogJump 0.5s ease;
+        }
+        @keyframes frogJump {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-30px); }
+            100% { transform: translateY(0px); }
+        }
+        .frog-sink {
+            animation: frogSink 1s ease forwards;
+        }
+        @keyframes frogSink {
+            0% { transform: translateY(0px); opacity: 1; }
+            100% { transform: translateY(50px); opacity: 0; }
+        }
+        .frog-message {
+            font-size: 0.9rem;
+            color: #fff9c4;
+            margin-top: 5px;
+        }
+        
+        .emotion-thermometer {
+            flex: 2;
+            background: #2a4a2a;
+            border-radius: 30px;
+            padding: 15px;
+            text-align: center;
+        }
+        .emotion-icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+        .thermometer-bar {
+            background: #1a2a1a;
+            border-radius: 20px;
+            height: 20px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .thermometer-fill {
+            background: linear-gradient(90deg, #ff4444, #ffaa00, #44ff44);
+            width: 0%;
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.5s ease;
+        }
+        .emotion-text {
+            color: #fff9c4;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .lives-area {
+            display: flex;
+            gap: 10px;
+            background: rgba(0,0,0,0.3);
+            padding: 8px 20px;
+            border-radius: 50px;
+        }
+        .heart {
+            font-size: 28px;
+            transition: 0.2s;
+        }
+        .heart.lost {
+            opacity: 0.3;
+            filter: grayscale(1);
+        }
+        
+        .timer-area {
+            background: #2c2e1e;
+            padding: 6px 18px;
+            border-radius: 50px;
+            color: #ffdd99;
+            font-weight: bold;
+            font-size: 1.3rem;
+            font-family: monospace;
+            text-align: center;
+        }
+
+        .level-indicator {
+            background: #1a3a1a;
+            padding: 10px;
+            text-align: center;
+            color: #ffcc44;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .pond-scene { padding: 20px 15px; background: #4a9e5a; flex: 1; }
+        .lilypads {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .lilypad {
+            background: radial-gradient(circle at 30% 20%, #6fbf4c, #2e7d32);
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 0 #1b5e20;
+            border: 2px solid #ffd966;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .lilypad.completed { background: radial-gradient(circle at 30% 20%, #b8e4a0, #4caf50); border: 3px solid gold; }
+        .lily-icon { font-size: 32px; }
+        .lily-number { font-weight: bold; background: #2b4d1a; color: #ffd966; padding: 0 8px; border-radius: 40px; font-size: 11px; }
+
+        .question-card {
+            background: #fff3ce;
+            border-radius: 45px;
+            padding: 22px;
+            border: 3px solid #ffcc44;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2c3e2f;
+            text-align: center;
+            margin-bottom: 18px;
+            line-height: 1.4;
+        }
+        .answers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 12px;
+            margin: 18px 0;
+        }
+        .answer-btn {
+            background: #fae67a;
+            padding: 14px 12px;
+            border: none;
+            border-radius: 80px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #2c4724;
+            text-align: left;
+            line-height: 1.3;
+        }
+        .answer-btn:hover:not(:disabled) { background: #ffb347; transform: scale(1.02); }
+        .answer-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .feedback {
+            border-radius: 35px;
+            padding: 12px;
+            margin: 12px 0;
+            font-weight: bold;
+            text-align: center;
+        }
+        .correct-feedback { background: #c8e6c9; color: #1e5a1e; border-left: 10px solid #2e7d32; }
+        .wrong-feedback { background: #ffcdd2; color: #a11d1d; border-left: 10px solid #c62828; }
+        .timer-warning { font-size: 1rem; font-weight: bold; text-align: center; margin-top: 8px; color: #b64516; }
+        
+        .final-screen {
+            background: #fff3e0;
+            border-radius: 40px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .hidden { display: none; }
+        
+        .game-footer {
+            background: #0d2e1a;
+            padding: 8px;
+            text-align: center;
+            color: #ffecb3;
+            font-size: 9px;
+            border-top: 1px solid #ffcc44;
+        }
+        
+        button { cursor: pointer; }
+        .reset-game {
+            background: #ff6600;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 30px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        @media (max-width: 750px) {
+            .lilypad { width: 65px; height: 65px; }
+            .frog-image { font-size: 55px; }
+            .emotion-icon { font-size: 35px; }
+            .question-text { font-size: 1rem; }
+            .answer-btn { font-size: 0.75rem; padding: 10px 8px; }
+            .answers-grid { grid-template-columns: 1fr; }
+            .timer-area { font-size: 1rem; padding: 4px 12px; }
+        }
+    </style>
+</head>
+<body>
+<div class="game-container">
+    <!-- ENCABEZADO MODIFICADO SEGÚN SOLICITUD -->
+    <div class="university-header">
+        <div class="logo-area">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy3ovAroONSGg9Y7NiQrlKm1yWwtnFb64BHg&s" alt="Logo UT" onerror="this.src='https://via.placeholder.com/50x40?text=UT'">
+            <div class="uni-text">
+                <strong>Universidad del Tolima</strong><br>
+                ACREDITADA DE ALTA CALIDAD
+            </div>
+        </div>
+        <div class="header-title">
+            <h1>EVALUACIÓN LÚDICA CON TIC</h1>
+            <p>Froggy Jumps · Seminario Educación Artística</p>
+        </div>
+        <div class="student-badge" id="studentBadge">
+            🐸 Estudiante: <span id="headerStudentName">---</span>
+        </div>
+    </div>
+
+    <div class="frog-emotion-area">
+        <div class="frog-character">
+            <div class="frog-image" id="frogImage">🐸</div>
+            <div class="frog-message" id="frogMessage">¡Sálvame!</div>
+        </div>
+        <div class="emotion-thermometer">
+            <div class="emotion-icon" id="emotionIcon">😊</div>
+            <div class="thermometer-bar">
+                <div class="thermometer-fill" id="thermometerFill"></div>
+            </div>
+            <div class="emotion-text" id="emotionText">Felicidad: 0%</div>
+        </div>
+        <div class="lives-area" id="livesContainer"></div>
+        <div class="timer-area">⏱️ <span id="timerSeconds">25</span>s</div>
+    </div>
+
+    <div class="level-indicator" id="levelIndicator">NIVEL 1 · Lirios 1 al 5</div>
+
+    <div class="pond-scene">
+        <div class="lilypads" id="lilypadsContainer"></div>
+        <div class="question-card" id="activeChallenge">
+            <div class="question-text" id="currentQuestionText"></div>
+            <div class="answers-grid" id="answersContainer"></div>
+            <div id="feedbackMsg" class="feedback hidden"></div>
+            <div id="timerWarning" class="timer-warning"></div>
+        </div>
+
+        <div id="gameOverScreen" class="final-screen hidden">
+            <div style="font-size: 70px;">💀🐸💧</div>
+            <h2>¡LA RANITA SE AHOGÓ!</h2>
+            <p>Has perdido todas las vidas. Vuelve a intentarlo.</p>
+            <button id="restartFromZeroBtn" class="reset-game">🌿 Jugar de nuevo</button>
+        </div>
+
+        <div id="levelCompleteScreen" class="final-screen hidden">
+            <div style="font-size: 70px;">🎉🐸✨</div>
+            <h2>¡NIVEL 1 COMPLETADO!</h2>
+            <p id="levelCompleteMsg">¡Excelente! Pasas al Nivel 2.</p>
+            <button id="nextLevelBtn" class="reset-game" style="background:#2e7d32;">🌟 Continuar al Nivel 2 🌟</button>
+        </div>
+
+        <div id="finalVictoryScreen" class="final-screen hidden">
+            <div style="font-size: 70px;">🏆🐸🎨</div>
+            <h2>¡FROGGY JUMPS COMPLETADO!</h2>
+            <p>¡Salvaste a la ranita! Has superado las 10 preguntas.</p>
+            <div id="finalResultsDetails"></div>
+            <button id="printCertificateBtn" class="reset-game" style="background:#2e7d32;">🖨️ Certificado de Logro</button>
+            <button id="playAgainFrog" class="reset-game" style="background:#ff914d;">🐸 Jugar de nuevo</button>
+        </div>
+    </div>
+    
+    <div class="game-footer">
+        Seminario Integral para la Educación Artística - CREADO Y DIRIGIDO POR YOBANA OROZCO BENAVIDES - Semestre IX - 2026
+    </div>
+</div>
+
+<script>
+    // ================= PREGUNTAS BASE =================
+    const PREGUNTAS_NIVEL1_BASE = [
+        { texto: "¿Cuál es la función principal que cumplen las artes dentro del currículo escolar?",
+          opciones: ["Desarrollar habilidades motrices finas a través del dibujo técnico y la caligrafía.", "Contribuir al desarrollo integral desde dimensiones cognitivas, emocionales, sociales y culturales.", "Servir como actividad recreativa para despejar la mente entre materias consideradas 'básicas'."],
+          correcta: 1 },
+        { texto: "¿Cuál de los siguientes NO es un beneficio reconocido de la educación artística?",
+          opciones: ["La creatividad y la sensibilidad estética como ejes del pensamiento divergente.", "La memorización acelerada de contenidos teóricos de otras disciplinas.", "El pensamiento crítico y la construcción de identidad personal y colectiva."],
+          correcta: 1 },
+        { texto: "¿Qué crítica fundamental se plantea sobre el lugar que ocupan las artes en la estructura educativa tradicional?",
+          opciones: ["Que se les exige una rigurosidad académica incompatible con su naturaleza expresiva.", "Que históricamente han sido consideradas áreas complementarias, subordinadas a asignaturas 'básicas'.", "Que los profesionales del arte carecen de la formación pedagógica suficiente para ejercer la docencia."],
+          correcta: 1 },
+        { texto: "¿De qué manera el arte puede fortalecer el vínculo entre la escuela y su comunidad circundante?",
+          opciones: ["Organizando ferias científicas que incluyan elementos decorativos elaborados por los estudiantes.", "A través de proyectos artísticos comunitarios que recuperan saberes locales y fortalecen identidades culturales.", "Enviando a los estudiantes a museos y galerías como actividad extracurricular obligatoria."],
+          correcta: 1 },
+        { texto: "¿Cuál es la característica que distingue al perfil 'artista-docente' de los otros perfiles en educación artística?",
+          opciones: ["Utiliza el arte exclusivamente como herramienta pedagógica complementaria a otras áreas del conocimiento.", "Integra su práctica artística personal con la enseñanza, generando experiencias creativas desde su propio quehacer.", "Posee una formación especializada en un lenguaje artístico específico como música, danza o teatro."],
+          correcta: 1 }
+    ];
+    
+    const PREGUNTAS_NIVEL2_BASE = [
+        { texto: "¿Qué define al docente generalista en el campo de la educación artística?",
+          opciones: ["Trabaja varias áreas del conocimiento y emplea el arte como herramienta pedagógica complementaria.", "Es un artista en activo que comparte su proceso creativo con los estudiantes en el aula.", "Posee un posgrado en gestión cultural y administración de espacios artísticos."],
+          correcta: 0 },
+        { texto: "La autonomía docente en educación artística posibilita, fundamentalmente:",
+          opciones: ["Diseñar experiencias creativas, adaptar metodologías e integrar diferentes lenguajes artísticos según el contexto.", "Seleccionar libremente los contenidos sin ningún tipo de planificación o lineamiento institucional.", "Evaluar a los estudiantes utilizando criterios puramente subjetivos, sin rúbricas ni indicadores."],
+          correcta: 0 },
+        { texto: "¿Cuál de los siguientes comportamientos contradice los principios éticos del educador artístico?",
+          opciones: ["Mostrar sensibilidad frente a las emociones y necesidades particulares de los estudiantes.", "Fomentar la competencia extrema entre los estudiantes para motivarlos a superar sus propios límites.", "Construir ambientes seguros, respetuosos e inclusivos para la expresión diversa."],
+          correcta: 1 },
+        { texto: "¿Cuál es el propósito formativo central de la educación artística, más allá de la enseñanza de técnicas?",
+          opciones: ["Capacitar a los estudiantes para memorizar los grandes hitos y movimientos de la historia del arte universal.", "Formar sujetos sensibles, críticos, creativos y transformadores de su entorno desde la cultura y la emoción.", "Preparar especialistas en un lenguaje artístico específico para insertarse en el mercado laboral cultural."],
+          correcta: 1 },
+        { texto: "¿Qué implica fortalecer la inteligencia emocional en la formación de docentes de arte?",
+          opciones: ["Construir procesos educativos más humanos, conscientes de las emociones y orientados a la transformación social.", "Aumentar la carga horaria de las disciplinas artísticas dentro del currículo escolar obligatorio.", "Capacitar a los docentes exclusivamente en técnicas de relajación y manejo del estrés."],
+          correcta: 0 }
+    ];
+    
+    // Función para mezclar opciones de una pregunta
+    function shuffleOptions(pregunta) {
+        let ops = pregunta.opciones.map((t, i) => ({ texto: t, esCorrecta: i === pregunta.correcta }));
+        for (let i = ops.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [ops[i], ops[j]] = [ops[j], ops[i]];
+        }
+        return { texto: pregunta.texto, opciones: ops.map(o => o.texto), correcta: ops.findIndex(o => o.esCorrecta) };
+    }
+    
+    // Función para mezclar el orden de las preguntas
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+    
+    // Variables de estado del juego
+    let currentLevel = 1;
+    let currentQuestions = [];
+    let totalLevelQuestions = 5;
+    let currentQuestionIndex = 0;
+    let completedQuestions = [];
+    let lives = 3;
+    let happiness = 0;
+    let happinessLevel1 = 0;
+    let happinessLevel2 = 0;
+    let gameActive = true;
+    let waitingAnswer = false;
+    let playerName = "";
+    
+    // Timer variables
+    let activeTimer = null;
+    let timeLeft = 25;
+    
+    // DOM elements
+    const lilyContainer = document.getElementById("lilypadsContainer");
+    const livesContainer = document.getElementById("livesContainer");
+    const frogImage = document.getElementById("frogImage");
+    const frogMessage = document.getElementById("frogMessage");
+    const emotionIcon = document.getElementById("emotionIcon");
+    const thermometerFill = document.getElementById("thermometerFill");
+    const emotionText = document.getElementById("emotionText");
+    const levelIndicator = document.getElementById("levelIndicator");
+    const questionText = document.getElementById("currentQuestionText");
+    const answersDiv = document.getElementById("answersContainer");
+    const feedbackDiv = document.getElementById("feedbackMsg");
+    const activeChallenge = document.getElementById("activeChallenge");
+    const gameOverScreen = document.getElementById("gameOverScreen");
+    const levelCompleteScreen = document.getElementById("levelCompleteScreen");
+    const finalVictoryScreen = document.getElementById("finalVictoryScreen");
+    const headerStudentName = document.getElementById("headerStudentName");
+    const timerSpan = document.getElementById("timerSeconds");
+    const timerWarningSpan = document.getElementById("timerWarning");
+    
+    function stopTimer() {
+        if (activeTimer) {
+            clearInterval(activeTimer);
+            activeTimer = null;
+        }
+    }
+    
+    function startTimer() {
+        stopTimer();
+        if (!gameActive || waitingAnswer === false) return;
+        timeLeft = 25;
+        timerSpan.innerText = timeLeft;
+        timerWarningSpan.innerText = "";
+        activeTimer = setInterval(() => {
+            if (!gameActive || waitingAnswer === false) {
+                stopTimer();
+                return;
+            }
+            if (timeLeft <= 1) {
+                stopTimer();
+                if (waitingAnswer && gameActive) {
+                    handleTimeout();
+                }
+            } else {
+                timeLeft--;
+                timerSpan.innerText = timeLeft;
+                if (timeLeft <= 5) {
+                    timerWarningSpan.innerText = "⚠️ ¡Últimos segundos! ⚠️";
+                } else {
+                    timerWarningSpan.innerText = "";
+                }
+            }
+        }, 1000);
+    }
+    
+    function updateHappiness(change) {
+        happiness = Math.max(0, Math.min(100, happiness + change));
+        updateThermometer();
+    }
+    
+    function handleTimeout() {
+        if (!waitingAnswer || !gameActive) return;
+        waitingAnswer = false;
+        stopTimer();
+        
+        lives--;
+        updateHappiness(-25);
+        updateLivesUI();
+        
+        feedbackDiv.classList.remove("hidden");
+        feedbackDiv.className = "feedback wrong-feedback";
+        feedbackDiv.innerHTML = `⏰ ¡TIEMPO AGOTADO! No respondiste a tiempo. Pierdes una vida.`;
+        
+        animateFrogSink();
+        
+        if (lives <= 0) {
+            gameActive = false;
+            updateHappiness(-30);
+            setTimeout(() => {
+                activeChallenge.classList.add("hidden");
+                gameOverScreen.classList.remove("hidden");
+            }, 1500);
+        } else {
+            setTimeout(() => {
+                loadQuestion();
+            }, 2000);
+        }
+        
+        document.querySelectorAll(".answer-btn").forEach(b => b.disabled = true);
+    }
+    
+    function updateLivesUI() {
+        livesContainer.innerHTML = "";
+        for (let i = 0; i < lives; i++) {
+            const heart = document.createElement("span");
+            heart.className = "heart";
+            heart.innerHTML = "❤️";
+            livesContainer.appendChild(heart);
+        }
+        for (let i = lives; i < 3; i++) {
+            const dead = document.createElement("span");
+            dead.className = "heart lost";
+            dead.innerHTML = "🖤";
+            livesContainer.appendChild(dead);
+        }
+    }
+    
+    function updateThermometer() {
+        const percent = happiness;
+        thermometerFill.style.width = percent + "%";
+        emotionText.innerText = `Felicidad: ${happiness}%`;
+        if (happiness >= 70) {
+            emotionIcon.innerHTML = "😁";
+            frogMessage.innerText = "¡Estoy muy feliz!";
+        } else if (happiness >= 40) {
+            emotionIcon.innerHTML = "🙂";
+            frogMessage.innerText = "¡Vamos bien!";
+        } else if (happiness >= 10) {
+            emotionIcon.innerHTML = "😐";
+            frogMessage.innerText = "Ayúdame...";
+        } else if (happiness > 0) {
+            emotionIcon.innerHTML = "😢";
+            frogMessage.innerText = "¡Me estoy hundiendo!";
+        } else {
+            emotionIcon.innerHTML = "💀";
+            frogMessage.innerText = "¡Me ahogué!";
+        }
+    }
+    
+    function resetUIForLevel() {
+        frogImage.classList.remove("frog-sink");
+        frogImage.style.filter = "brightness(1)";
+        frogImage.style.opacity = "1";
+        frogImage.style.transform = "translateY(0px)";
+        updateLivesUI();
+        updateThermometer();
+    }
+    
+    function renderLilypads() {
+        lilyContainer.innerHTML = "";
+        for (let i = 0; i < totalLevelQuestions; i++) {
+            const pad = document.createElement("div");
+            pad.className = `lilypad ${completedQuestions[i] ? 'completed' : ''}`;
+            pad.innerHTML = `<div class="lily-icon">${completedQuestions[i] ? "🐸✅" : "🍃"}</div><div class="lily-number">${currentLevel === 1 ? i+1 : i+6}</div>`;
+            lilyContainer.appendChild(pad);
+        }
+    }
+    
+    function animateFrogJump() {
+        frogImage.classList.add("frog-jump");
+        setTimeout(() => frogImage.classList.remove("frog-jump"), 500);
+    }
+    
+    function animateFrogSink() {
+        frogImage.classList.add("frog-sink");
+        frogMessage.innerText = "💀 ¡Se hundió! 💀";
+    }
+    
+    function loadQuestion() {
+        if (!gameActive) return;
+        if (currentQuestionIndex >= totalLevelQuestions) {
+            completeLevel();
+            return;
+        }
+        if (completedQuestions[currentQuestionIndex]) {
+            currentQuestionIndex++;
+            loadQuestion();
+            return;
+        }
+        const q = currentQuestions[currentQuestionIndex];
+        questionText.innerText = q.texto;
+        answersDiv.innerHTML = "";
+        feedbackDiv.classList.add("hidden");
+        timerWarningSpan.innerText = "";
+        waitingAnswer = true;
+        
+        q.opciones.forEach((opt, idx) => {
+            const btn = document.createElement("button");
+            btn.className = "answer-btn";
+            btn.innerText = `${String.fromCharCode(65+idx)}. ${opt}`;
+            btn.onclick = () => handleAnswer(idx, q.correcta, btn);
+            answersDiv.appendChild(btn);
+        });
+        renderLilypads();
+        startTimer();
+    }
+    
+    function handleAnswer(selected, correct, btn) {
+        if (!waitingAnswer || !gameActive) return;
+        waitingAnswer = false;
+        stopTimer();
+        const isCorrect = (selected === correct);
+        
+        if (isCorrect) {
+            completedQuestions[currentQuestionIndex] = true;
+            updateHappiness(20);
+            animateFrogJump();
+            feedbackDiv.classList.remove("hidden");
+            feedbackDiv.className = "feedback correct-feedback";
+            feedbackDiv.innerHTML = "✅ ¡Correcto! +20% felicidad. La rana salta feliz.";
+            currentQuestionIndex++;
+            renderLilypads();
+            
+            if (currentQuestionIndex >= totalLevelQuestions) {
+                setTimeout(() => completeLevel(), 1000);
+            } else {
+                setTimeout(() => loadQuestion(), 1000);
+            }
+        } else {
+            lives--;
+            updateHappiness(-20);
+            updateLivesUI();
+            
+            const correctText = currentQuestions[currentQuestionIndex].opciones[correct];
+            feedbackDiv.classList.remove("hidden");
+            feedbackDiv.className = "feedback wrong-feedback";
+            feedbackDiv.innerHTML = `❌ Incorrecto. La respuesta correcta era: "${correctText}". Pierdes una vida.`;
+            
+            animateFrogSink();
+            
+            if (lives <= 0) {
+                gameActive = false;
+                updateHappiness(-20);
+                setTimeout(() => {
+                    activeChallenge.classList.add("hidden");
+                    gameOverScreen.classList.remove("hidden");
+                }, 1500);
+            } else {
+                setTimeout(() => {
+                    loadQuestion();
+                }, 2000);
+            }
+        }
+        
+        document.querySelectorAll(".answer-btn").forEach(b => b.disabled = true);
+    }
+    
+    function completeLevel() {
+        stopTimer();
+        if (currentLevel === 1) {
+            happinessLevel1 = happiness;
+            levelCompleteScreen.classList.remove("hidden");
+            activeChallenge.classList.add("hidden");
+            document.getElementById("levelCompleteMsg").innerHTML = `¡Excelente! Has respondido las 5 preguntas del Nivel 1.<br>Felicidad alcanzada: ${happinessLevel1}%<br>¡Pasa al Nivel 2!`;
+        } else {
+            happinessLevel2 = happiness;
+            finalVictory();
+        }
+    }
+    
+    function startLevel2() {
+        currentLevel = 2;
+        let shuffledBase = shuffleArray([...PREGUNTAS_NIVEL2_BASE]);
+        currentQuestions = shuffledBase.map(q => shuffleOptions(q));
+        totalLevelQuestions = 5;
+        currentQuestionIndex = 0;
+        completedQuestions = new Array(5).fill(false);
+        lives = 3;
+        happiness = 0;
+        gameActive = true;
+        waitingAnswer = false;
+        
+        levelIndicator.innerHTML = "🌟 NIVEL 2 · Lirios 6 al 10 🌟";
+        levelCompleteScreen.classList.add("hidden");
+        activeChallenge.classList.remove("hidden");
+        gameOverScreen.classList.add("hidden");
+        
+        resetUIForLevel();
+        renderLilypads();
+        loadQuestion();
+    }
+    
+    function finalVictory() {
+        stopTimer();
+        gameActive = false;
+        activeChallenge.classList.add("hidden");
+        document.getElementById("finalResultsDetails").innerHTML = `
+            <h3>🎓 Resultados Finales</h3>
+            <p>✅ Nivel 1 completado: 5/5 preguntas</p>
+            <p>✅ Nivel 2 completado: 5/5 preguntas</p>
+            <p>😊 Felicidad en Nivel 1: ${happinessLevel1}%</p>
+            <p>😊 Felicidad en Nivel 2: ${happinessLevel2}%</p>
+            <p>🏆 ¡Salvaste a la ranita!</p>
+            <p><strong>🎨 ¡Dominas el Seminario de Educación Artística!</strong></p>
+        `;
+        finalVictoryScreen.classList.remove("hidden");
+    }
+    
+    function printCertificate() {
+        const nombre = headerStudentName.innerText;
+        const fecha = new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+        
+        const certificadoHtml = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <title>Certificado Froggy Jumps</title>
+                <style>
+                    * { margin: 0; padding: 0; box-sizing: border-box; }
+                    body { font-family: 'Segoe UI', Arial, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #e8f0e8; margin: 0; padding: 0; }
+                    .certificate-paper { width: 100%; max-width: 10in; margin: 0 auto; }
+                    .certificate-inner { background: linear-gradient(135deg, #fff9ef, #fff3e0); border: 4px solid #ffb347; border-radius: 30px; padding: 30px 25px; text-align: center; }
+                    .certificate-title { font-size: 34px; color: #2d6a2f; margin: 5px 0; font-weight: bold; letter-spacing: 2px; }
+                    .certificate-subtitle { font-size: 18px; color: #b64926; margin: 5px 0; }
+                    .certificate-name { font-size: 28px; color: #1a4d1a; margin: 15px 0; padding: 6px 20px; border-bottom: 3px solid #ffb347; border-top: 3px solid #ffb347; display: inline-block; background: #fff8e7; border-radius: 20px; }
+                    .certificate-results { background: #fceeca; padding: 12px; border-radius: 18px; margin: 15px auto; width: 80%; }
+                    .certificate-footer { margin-top: 15px; font-size: 10px; color: #555; border-top: 1px solid #ffb347; padding-top: 10px; }
+                    .criteria-list { text-align: left; display: inline-block; margin: 10px auto; font-size: 12px; }
+                    .criteria-list p { margin: 4px 0; }
+                    @media print {
+                        body { background: white; margin: 0; padding: 0; }
+                        .certificate-paper { margin: 0; padding: 0; width: 100%; }
+                        @page { size: letter landscape; margin: 0.2in; }
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="certificate-paper">
+                    <div class="certificate-inner">
+                        <div style="font-size: 55px;">🐸🏆🎨</div>
+                        <div class="certificate-title">CERTIFICADO DE LOGRO</div>
+                        <div class="certificate-subtitle">Evaluación Lúdica con TIC - Froggy Jumps</div>
+                        <div style="font-size: 12px; margin: 5px 0;">Seminario Integral para la Educación Artística - Tutoría 5 - Semestre IX</div>
+                        <div style="margin: 10px 0;">
+                            <p style="font-size: 14px;">Otorgado a:</p>
+                            <div class="certificate-name">${nombre}</div>
+                        </div>
+                        <p style="font-size: 11px;">Por haber completado exitosamente el desafío universitario, demostrando dominio conceptual en:</p>
+                        <div class="criteria-list">
+                            <p>✓ Fundamentos del arte en el currículo escolar</p>
+                            <p>✓ Relación entre arte, comunidad y saberes locales</p>
+                            <p>✓ Perfiles docentes en educación artística</p>
+                            <p>✓ Autonomía y ética profesional</p>
+                            <p>✓ Inteligencia emocional y transformación social</p>
+                        </div>
+                        <div class="certificate-results">
+                            <p><strong>Resultados obtenidos:</strong></p>
+                            <p style="font-size: 18px; font-weight: bold;">✅ Nivel 1: 5/5 preguntas correctas</p>
+                            <p style="font-size: 18px; font-weight: bold;">✅ Nivel 2: 5/5 preguntas correctas</p>
+                            <p style="font-size: 16px;">😊 Felicidad en Nivel 1: ${happinessLevel1}%</p>
+                            <p style="font-size: 16px;">😊 Felicidad en Nivel 2: ${happinessLevel2}%</p>
+                        </div>
+                        <div class="certificate-footer">
+                            <p>Fecha: ${fecha}</p>
+                            <p style="margin-top: 6px;">Evaluación lúdica dirigida y creada por <strong>Yobana Orozco Benavides</strong> - Semestre IX - 2026</p>
+                            <p>Universidad del Tolima - Cali</p>
+                        
+                        </div>
+                    </div>
+                </div>
+                <script>window.print();<\/script>
+            </body>
+            </html>
+        `;
+        
+        const ventana = window.open();
+        ventana.document.write(certificadoHtml);
+        ventana.document.close();
+    }
+    
+    function fullReset() {
+        stopTimer();
+        currentLevel = 1;
+        let shuffledBase = shuffleArray([...PREGUNTAS_NIVEL1_BASE]);
+        currentQuestions = shuffledBase.map(q => shuffleOptions(q));
+        totalLevelQuestions = 5;
+        currentQuestionIndex = 0;
+        completedQuestions = new Array(5).fill(false);
+        lives = 3;
+        happiness = 0;
+        gameActive = true;
+        waitingAnswer = false;
+        levelIndicator.innerHTML = "🌿 NIVEL 1 · Lirios 1 al 5 🌿";
+        updateLivesUI();
+        updateThermometer();
+        resetUIForLevel();
+        gameOverScreen.classList.add("hidden");
+        levelCompleteScreen.classList.add("hidden");
+        finalVictoryScreen.classList.add("hidden");
+        activeChallenge.classList.remove("hidden");
+        renderLilypads();
+        loadQuestion();
+    }
+    
+    document.getElementById("restartFromZeroBtn")?.addEventListener("click", () => fullReset());
+    document.getElementById("nextLevelBtn")?.addEventListener("click", () => startLevel2());
+    document.getElementById("playAgainFrog")?.addEventListener("click", () => fullReset());
+    document.getElementById("printCertificateBtn")?.addEventListener("click", () => printCertificate());
+    
+    let nameInput = prompt("🐸 Bienvenido a Salva a la Ranita. Ingresa tu nombre completo:", "Estudiante Universidad del Tolima");
+    if (nameInput && nameInput.trim() !== "") {
+        playerName = nameInput.trim();
+        headerStudentName.innerText = playerName;
+    } else {
+        headerStudentName.innerText = "Estudiante UT";
+    }
+    
+    fullReset();
+</script>
+</body>
+</html>
